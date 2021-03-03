@@ -20,3 +20,4 @@ def f():
     print(sys.getrefcount(x))
 
 f()
+print("Działa?")
