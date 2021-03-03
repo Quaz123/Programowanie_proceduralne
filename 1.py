@@ -21,3 +21,4 @@ def f():
 
 f()
 print("Działa?")
+print("A teraz?")
