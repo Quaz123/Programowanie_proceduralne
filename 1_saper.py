@@ -45,9 +45,9 @@ def create_board(mines, rows, columns, mine="*"):
     return board
 
 
-r = get_number(8, 30, "Podaj liczbę min ")
-c = get_number(8, 24, "Podaj liczbę wierszy")
-m = get_number(1, r * c - 1, "Podaj liczbę kolumn")
+r = get_number(8, 30, "Podaj liczbę wierszy ")
+c = get_number(8, 24, "Podaj liczbę kolumn")
+m = get_number(1, r * c - 1, "Podaj liczbę min")
 mines = lay_mines(m, r, c)
 print(mines)
 board = create_board(mines, r, c)
@@ -56,4 +56,3 @@ for w in board:
     for el in w:
         print(f"{el:^3}", end="")
     print()
-xdxdxdx
