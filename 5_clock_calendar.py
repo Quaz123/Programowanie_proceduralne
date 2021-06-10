@@ -67,7 +67,6 @@ class Clock:
             ':': ('   ', ' # ', '   ', ' # ', '   '),
         }
         number = f"{f(self.hours)}:{f(self.minutes)}:{f(self.seconds)}"
-        print(number)
         digits = [cyfry_dict[digit] for digit in str(number)]
         for i in range(5):
             print("  ".join(segment[i] for segment in digits))
