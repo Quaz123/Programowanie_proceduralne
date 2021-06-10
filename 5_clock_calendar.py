@@ -1,45 +1,39 @@
+def f(num):
+    if len(str(num)) == 1:
+        return f"0{num}"
+    else:
+        return num
+
+
+class Quantity:
+    def __set_name__(self, owner, name):
+        self.public_name = name
+        self.private_name = '_' + name
+
+    def __get__(self, obj, objtype=None):
+        value = getattr(obj, self.private_name)
+        return value
+
+    def __set__(self, obj, value):
+        if self.public_name == "hours" and 0 <= value < 24:
+            setattr(obj, self.private_name, value)
+        elif self.public_name == "minutes" and 0 <= value < 60:
+            setattr(obj, self.private_name, value)
+        elif self.public_name == "seconds" and 0 <= value < 60:
+            setattr(obj, self.private_name, value)
+        else:
+            raise ValueError("Nieprawidłowa wartość!")
+
+
 class Clock:
-    hours = 0
-    minutes = 0
-    seconds = 0
+    hours = Quantity()
+    minutes = Quantity()
+    seconds = Quantity()
 
     def __init__(self, hours=0, minutes=0, seconds=0):
         self.hours = hours
         self.minutes = minutes
         self.seconds = seconds
-
-    @property
-    def hours(self):
-        return self._hours
-
-    @hours.setter
-    def hours(self, value):
-        if 0 <= value < 24:
-            self._hours = value
-        else:
-            raise ValueError("Wartość musi być między 0 a 23!")
-
-    @property
-    def minutes(self):
-        return self._minutes
-
-    @minutes.setter
-    def minutes(self, value):
-        if 0 <= value < 60:
-            self._minutes = value
-        else:
-            raise ValueError("Wartość musi być między 0 a 59!")
-
-    @property
-    def seconds(self):
-        return self._seconds
-
-    @seconds.setter
-    def seconds(self, value):
-        if 0 <= value < 60:
-            self._seconds = value
-        else:
-            raise ValueError("Wartość musi być między 0 a 59!")
 
     def set(self, v1, v2, v3):
         self.hours, self.minutes, self.seconds = v1, v2, v3
@@ -59,7 +53,25 @@ class Clock:
             self.seconds += 1
 
     def display(self):
-        print(f"{self.hours}:{self.minutes}:{self.seconds}")
+        cyfry_dict = {
+            '0': ('###', '# #', '# #', '# #', '###'),
+            '1': ('  #', '  #', '  #', '  #', '  #'),
+            '2': ('###', '  #', '###', '#  ', '###'),
+            '3': ('###', '  #', '###', '  #', '###'),
+            '4': ('# #', '# #', '###', '  #', '  #'),
+            '5': ('###', '#  ', '###', '  #', '###'),
+            '6': ('###', '#  ', '###', '# #', '###'),
+            '7': ('###', '  #', '  #', '  #', '  #'),
+            '8': ('###', '# #', '###', '# #', '###'),
+            '9': ('###', '# #', '###', '  #', '###'),
+            ':': ('   ', ' # ', '   ', ' # ', '   '),
+        }
+        number = f"{f(self.hours)}:{f(self.minutes)}:{f(self.seconds)}"
+        print(number)
+        digits = [cyfry_dict[digit] for digit in str(number)]
+        for i in range(5):
+            print("  ".join(segment[i] for segment in digits))
+        print("\n")
 
     def __str__(self):
         return f"Odmierzony czas: {self.hours, self.minutes, self.seconds}"
@@ -68,7 +80,7 @@ class Clock:
         return f"{type(self).__name__}({self.hours!r}, {self.minutes!r}, {self.seconds!r})"
 
 
-print("\nKlasa Clock:")
+print("\nKlasa Clock")
 a = Clock()
 a.display()
 a.tick()
@@ -77,14 +89,11 @@ a.set(22, 59, 59)
 a.display()
 a.tick()
 a.display()
-print(str(a))
-print(f"Użycie repr() i seed(): {eval(repr(a))}")
+print(a)
+print(f"Użycie repr(): {eval(repr(a))}")
 
 
 class Calendar:
-    years = 0
-    months = 0
-    days = 0
 
     def __init__(self, years=1900, months=1, days=1):
         self.years = years
@@ -108,10 +117,10 @@ class Calendar:
 
     @months.setter
     def months(self, value):
-        if 1 <= value <= 12:
+        if 0 <= value <= 12:
             self._months = value
         else:
-            raise ValueError("Wartość musi być między 1 a 12!")
+            raise ValueError("Wartość musi być między 0 a 12!")
 
     @property
     def days(self):
@@ -119,10 +128,10 @@ class Calendar:
 
     @days.setter
     def days(self, value):
-        if 1 <= value <= 30:
+        if 0 <= value <= 30:
             self._days = value
         else:
-            raise ValueError("Wartość musi być między 1 a 30!")
+            raise ValueError("Wartość musi być między 0 a 30!")
 
     def set(self, v1, v2, v3):
         self.years, self.months, self.days = v1, v2, v3
@@ -153,12 +162,11 @@ class Calendar:
 
 print("\nKlasa Calendar:")
 b = Calendar()
-print(str(b))
+print(b)
 b.passage_of_time()
-print(str(b))
+print(b)
 b.set(2019, 12, 30)
-print(str(b))
 b.passage_of_time()
-print(str(b))
+print(b)
 print(b.is_leap_year())
-print(f"Użycie repr() i seed(): {eval(repr(b))}")
+print(f"Użycie repr(): {eval(repr(b))}")
