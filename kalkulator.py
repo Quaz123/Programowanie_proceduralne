@@ -69,6 +69,7 @@ class Kalkulator(QWidget):  # dziedziczy właściwości i metody z klasy QWidget
         # funkcja kwadratowa
         etykietaM2 = QLabel("<b>Kalkulator miejsc zerowych</b>")
         etykietaM2.setFont(QFont('Arial', 13))
+        etykietaM2.setAlignment(QtCore.Qt.AlignCenter)
         etykieta4 = QLabel("Podaj A:", self)
         etykieta5 = QLabel("Podaj B:", self)
         etykieta6 = QLabel("Podaj C:", self)
@@ -103,19 +104,77 @@ class Kalkulator(QWidget):  # dziedziczy właściwości i metody z klasy QWidget
         ukladT.addLayout(ukladH1, 8, 0, 1, 4)
 
         obliczBtn = QPushButton("Oblicz miejsca zerowe", self)
-        koniecBtn = QPushButton("Koniec", self)
-        koniecBtn.resize(koniecBtn.sizeHint())
+        obliczBtn.clicked.connect(self.dzialanie2)
 
         ukladT.addWidget(obliczBtn, 9, 0, 1, 3)
-        ukladT.addWidget(koniecBtn, 10, 0, 1, 3)
+
+        ukladT.addWidget(odstep, 10, 0)
+
+        # pole
+        etykietaM3 = QLabel("<b>Kalkulator pola</b>")
+        etykietaM3.setFont(QFont('Arial', 13))
+        etykietaM3.setAlignment(QtCore.Qt.AlignCenter)
+        etykieta9 = QLabel("Bok 1:", self)
+        etykieta10 = QLabel("Bok 2:", self)
+        etykieta11 = QLabel("Wysokość:", self)
+        etykieta12 = QLabel("Pole (w j^2) =", self)
+
+        ukladT.addWidget(etykietaM3, 11, 1)
+        ukladH2 = QHBoxLayout()
+        ukladH3 = QHBoxLayout()
+        ukladT.addWidget(etykieta9, 12, 0)
+        ukladT.addWidget(etykieta10, 12, 1)
+        ukladT.addWidget(etykieta11, 12, 2)
+
+        self.liczbaBokaEdt = QLineEdit()
+        self.liczbaBokbEdt = QLineEdit()
+        self.liczbaWysEdt = QLineEdit()
+        self.wynikPoleEdt = QLineEdit()
+
+        self.wynikPoleEdt.readonly = True
+        self.liczbaBokaEdt.setToolTip('Wpisz odpowiednie wymiary a następnie wybierz działanie')
+        self.liczbaBokbEdt.setToolTip('Wpisz odpowiednie wymiary a następnie wybierz działanie')
+        self.liczbaWysEdt.setToolTip('Wpisz odpowiednie wymiary a następnie wybierz działanie')
+
+        ukladT.addWidget(self.liczbaBokaEdt, 13, 0)
+        ukladT.addWidget(self.liczbaBokbEdt, 13, 1)
+        ukladT.addWidget(self.liczbaWysEdt, 13, 2)
+        ukladH2.addWidget(etykieta12)
+        ukladH2.addWidget(self.wynikPoleEdt)
+        ukladT.addLayout(ukladH2, 14, 0, 1, 3)
+
+        obliczKwadBtn = QPushButton("Oblicz pole kwadratu", self)
+        obliczProsBtn = QPushButton("Oblicz pole prostokąta", self)
+        obliczTrojBtn = QPushButton("Oblicz pole trójkąta", self)
+        obliczTrapBtn = QPushButton("Oblicz pole trapezu", self)
+        obliczRownBtn = QPushButton("Oblicz pole równoległoboku", self)
+        obliczRombBtn = QPushButton("Oblicz pole rombu", self)
+        ukladH3.addWidget(obliczKwadBtn)
+        ukladH3.addWidget(obliczProsBtn)
+        ukladH3.addWidget(obliczTrojBtn)
+        ukladH3.addWidget(obliczTrapBtn)
+        ukladH3.addWidget(obliczRownBtn)
+        ukladH3.addWidget(obliczRombBtn)
+        ukladT.addLayout(ukladH3, 15, 0, 1, 6)
+        koniecBtn = QPushButton("Zakończ program", self)
+        koniecBtn.resize(koniecBtn.sizeHint())
+
+        ukladT.addWidget(obliczBtn, 15, 0, 1, 3)
+        ukladT.addWidget(odstep, 16, 0)
+        ukladT.addWidget(koniecBtn, 17, 0, 1, 3)
 
         # przypisanie utworzonego układu do okna
         self.setLayout(ukladT)
 
-        obliczBtn.clicked.connect(self.dzialanie2)
+        obliczKwadBtn.clicked.connect(self.dzialanie3)
+        obliczProsBtn.clicked.connect(self.dzialanie3)
+        obliczTrojBtn.clicked.connect(self.dzialanie3)
+        obliczTrapBtn.clicked.connect(self.dzialanie3)
+        obliczRownBtn.clicked.connect(self.dzialanie3)
+        obliczRombBtn.clicked.connect(self.dzialanie3)
         koniecBtn.clicked.connect(self.koniec)  # naciśnięcie przycisku Koniec wywołuję metodę koniec()
 
-        self.setGeometry(710, 390, 500, 300)
+        # self.setGeometry(710, 390, 700, 500)
         self.setWindowIcon(QIcon('icon.jpg'))
         self.setWindowTitle("Kalkulator")
         self.show()
@@ -183,6 +242,31 @@ class Kalkulator(QWidget):  # dziedziczy właściwości i metody z klasy QWidget
 
         except ValueError:
             QMessageBox.warning(self, "Błąd", "Błędne dane", QMessageBox.Ok)
+
+    def dzialanie3(self):
+
+        nadawca = self.sender()
+
+        try:
+            a = float(self.liczbaBokaEdt.text())
+            b = float(self.liczbaBokbEdt.text())
+            h = float(self.liczbaWysEdt.text())
+
+            if nadawca.text() == "Oblicz pole kwadratu":
+                pole = a**2
+            elif nadawca.text() == "Oblicz pole prostokąta":
+                pole = a*b
+            elif nadawca.text() == "Oblicz pole trójkąta":
+                pole = a*h/2
+            elif nadawca.text() == "Oblicz pole trapezu":
+                pole = (a+b)*h*0.5
+            else:  # wzór na pole równoległoboku i rombu jest taki sam
+                pole = a*h
+
+            self.wynikPoleEdt.setText(str(pole))
+
+        except ValueError:
+            QMessageBox.warning(self, "Błąd", "Uzupełnij wszystkie długości", QMessageBox.Ok)
 
 
 if __name__ == '__main__':  # zapobiega uruchamianiu kodu podczas importowania modułu
