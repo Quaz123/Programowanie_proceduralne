@@ -21,6 +21,12 @@ class Quantity:
             setattr(obj, self.private_name, value)
         elif self.public_name == "seconds" and 0 <= value < 60:
             setattr(obj, self.private_name, value)
+        elif self.public_name == "years" and 0 <= value <= 9999:
+            setattr(obj, self.private_name, value)
+        elif self.public_name == "months" and 1 <= value <= 12:
+            setattr(obj, self.private_name, value)
+        elif self.public_name == "days" and 1 <= value <= 30:
+            setattr(obj, self.private_name, value)
         else:
             raise ValueError("Nieprawidłowa wartość!")
 
@@ -98,39 +104,6 @@ class Calendar:
         self.years = years
         self.months = months
         self.days = days
-
-    @property
-    def years(self):
-        return self._years
-
-    @years.setter
-    def years(self, value):
-        if 0 <= value <= 9999:
-            self._years = value
-        else:
-            raise ValueError("Wartość musi być między 0 a 9999!")
-
-    @property
-    def months(self):
-        return self._months
-
-    @months.setter
-    def months(self, value):
-        if 0 <= value <= 12:
-            self._months = value
-        else:
-            raise ValueError("Wartość musi być między 0 a 12!")
-
-    @property
-    def days(self):
-        return self._days
-
-    @days.setter
-    def days(self, value):
-        if 0 <= value <= 30:
-            self._days = value
-        else:
-            raise ValueError("Wartość musi być między 0 a 30!")
 
     def set(self, v1, v2, v3):
         self.years, self.months, self.days = v1, v2, v3
